@@ -2064,18 +2064,21 @@ scoresAverage(movies);
 // Iteration 4: Drama movies - Get the average of Drama Movies
 
 function dramaMoviesScore(movies) {
-  counter = 0;
+  let counter = 0;
   if (movies.length === 0 ){
     return 0;
   }
-  const avgDrama = movies.filter(function (movie) {
-    if (movie.genre.includes("Drama")) {
-      counter = (counter += movie.score) / movies.length;
-      return counter;
+
+  const scoreAverage = movies.reduce(function (sum, movie) {
+    if(movie.score && movie.genre.includes("Drama")) {
+      return sum + movie.score;
+    } else {
+      //should return average even if one of the movies does not have score
+      return sum;
     }
+  }, 0);
 
-  });
-
+  return Number(scoreAverage/movies.length);
   //console.log(counter);
 }
 
