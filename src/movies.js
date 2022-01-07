@@ -2042,18 +2042,21 @@ function scoresAverage(movies) {
   if (movies.length === 0 ){
     return 0;
   }
-  let counter = 0;
-  let avg = 0;
 
   const scoreAverage = movies.reduce(function (sum, movie) {
-    counter = sum + movie.score;
-    avg = parseInt(parseFloat(counter/movies.length).toFixed(2));
-
-    return avg;
+    if(movie.score) {
+      return sum + movie.score;
+    } else {
+      //should return average even if one of the movies does not have score
+      return sum;
+    }
+    
+    
   }, 0);
 
-  //console.log(avg)
-  return avg;
+  let avg = (scoreAverage/movies.length).toFixed(2);
+  //make sure we return a number and not a string
+  return Number(avg);
 }
 
 scoresAverage(movies);
@@ -2081,23 +2084,59 @@ dramaMoviesScore(movies);
 // Iteration 5: Ordering by year - 
 //Order by year, ascending (in growing order)
 function orderByYear(movies) {
-  const movieYears = movies.map(function (movie) {
-    return movie.year;
+  let moviesArray = Array.from(movies);
+  
+  moviesArray.sort(function (a, b) {
+
+    if (a.year > b.year) {
+      return 1;
+    } else if (b.year > a.year) {
+      return -1;
+    } else {
+      if (a.title > b.title) {
+        return -1;
+      } else if (b.title > a.title) {
+        return -1;
+      }
+      return 0;
+    }
+
   });
   
-  movieYears.sort(function (a, b) {
-    return b - a;
-  });
-  movieYears = movieYears.reverse();
-  return movieYears;
+  return moviesArray;
 }
 
 orderByYear(movies);
 
 // Iteration 6: Alphabetic Order - Order by title and print the first 20 titles
-function orderAlphabetically() {}
+function orderAlphabetically(movies) {
+  //should not mutate the original array
+  let moviesArray = Array.from(movies);
+  
+  moviesArray.sort(function (a, b) {
+      if (a.title > b.title) {
+        return -1;
+      } else if (b.title > a.title) {
+        return -1;
+      } else {
+        return 0;
+      }
+  });
 
+  let moviesTitles = moviesArray.map(function (movie) {
+    return movie.title;
+  });
+  
+  if (moviesTitles.length > 20 ) {
+    console.log(moviesTitles.slice(0, 20))
+    return moviesTitles.slice(0, 20);
+  } else {
+    return moviesTitles;
+  }
+  
+}
 
+orderAlphabetically(movies);
 
 
 
